@@ -47,7 +47,7 @@ in
     (inputs.flake-file.flakeModules.nix-auto-follow or { })
   ];
 
-  den.schema.user.classes = lib.mkDefault [ "homeManager" ];
+  den.schema.user.classes = mkDefault [ "homeManager" ];
 
   systems = [
     "x86_64-linux"

@@ -14,9 +14,15 @@
 
   - [Dendrix](https://dendrix.oeiuwq.com/index.html).
 */
-{ inputs, lib, ... }:
+{
+  den,
+  inputs,
+  lib,
+  ...
+}:
 let
   inherit (lib) mkDefault;
+  inherit (den.lib.policy) route;
 in
 {
   flake-file.inputs = {
@@ -34,6 +40,27 @@ in
     (inputs.nix-unit.modules.flake.default or { })
   ];
 
+  den = {
+    classes.tests = { };
+
+    policies.tests-to-flake-parts = _: [
+      (route {
+        fromClass = "tests";
+        intoClass = "flake-parts";
+        collectSubtree = true;
+        path = [
+          "nix-unit"
+          "tests"
+        ];
+        # test helpers
+        adaptArgs = args: args.config.allModuleArgs // { };
+      })
+    ];
+
+    schema.flake-parts.includes = [ den.policies.tests-to-flake-parts ];
+  };
+
+  # some globals
   perSystem =
     { lib, pkgs, ... }:
     let
@@ -42,6 +69,7 @@ in
     {
       nix-unit = {
         # NOTE: a `nixpkgs-lib` follows rule is currently required
+        allowNetwork = true;
         inherit inputs;
       };
 
@@ -58,4 +86,5 @@ in
         ];
       };
     };
+
 }

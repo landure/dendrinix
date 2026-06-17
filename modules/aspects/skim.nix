@@ -27,6 +27,15 @@
 */
 {
   biapy.skim = { home, ... }: {
+    nixos =
+      { lib, ... }:
+      let
+        inherit (lib.modules) mkDefault;
+      in
+      {
+        programs.skim.enable = mkDefault true;
+      };
+
     homeManager =
       {
         config,

@@ -2,7 +2,7 @@
   # Grim & Satty for Niri
 
   Grim command-line screenshot tool, with Satty image annotation tool.
-  
+
   Add this to Niri's `config.kdl`:
 
   ```kdl
@@ -51,13 +51,13 @@
         ...
       }:
       let
-        inherit (lib.meta) getExe;
+        inherit (lib.meta) getExe getExe';
         inherit (lib.modules) mkDefault;
 
         grim_exe = getExe pkgs.grim;
         slurp_exe = getExe pkgs.slurp;
-        jq_exe = getExe programs.jq.package;
-        satty_exe = getExe programs.satty.package;
+        jq_exe = getExe config.programs.jq.package;
+        satty_exe = getExe config.programs.satty.package;
         wl-copy_exe = getExe' pkgs.wl-clipboard "wl-copy";
         wl-paste_exe = getExe' pkgs.wl-clipboard "wl-paste";
       in

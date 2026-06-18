@@ -66,7 +66,7 @@
           # ALT-C
           changeDirWidgetCommand = mkDefault "${getExe config.programs.fd.package} --type 'd' --hidden --follow --exclude '.git'";
           changeDirWidgetOptions = mkDefault [
-            "--preview 'tree -C {} | head -200'";
+            "--preview 'tree -C {} | head -200'"
           ];
 
           # CTRL-T

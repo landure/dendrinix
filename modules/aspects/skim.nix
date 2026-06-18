@@ -26,7 +26,7 @@
   - [Use CLI like a modern tech bro @ tsukie](https://www.tsukie.com/en/technologies/use-cli-like-a-modern-tech-bro/).
 */
 {
-  biapy.skim = { home, ... }: {
+  biapy.skim = {
     nixos =
       { lib, ... }:
       let

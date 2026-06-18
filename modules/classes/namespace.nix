@@ -11,9 +11,11 @@
   biapy,
   den,
   inputs,
+  lib,
   ...
 }:
 let
+  inherit (lib.modules) evalModules;
   inherit (den.lib.policy) route;
   inherit (den.lib.aspects) resolve;
   forwardBiapyAspects =
@@ -41,7 +43,7 @@ in
     ##
     #  };
     homeModules = {
-      skim = resolve.to "home" biapy.skim;
+      skim = (evalModules { modules = [(resolve "homeManager" biapy.skim)]; }).config;
     };
   };
 

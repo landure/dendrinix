@@ -96,7 +96,8 @@
             ${getExe config.programs.skim.package} --ansi --delimiter ':' --interactive \
               --cmd='${getExe config.programs.ripgrep.package} --line-number --no-heading --color=always {q}' \
               --preview='${getExe config.programs.bat.package} --style=numbers --color=always --highlight-line {2} {1}' \
-              --preview-window='right:70%:wrap'
+              --preview-window='right:70%:wrap' \
+              --cmd-query="''${@}"
           '')
 
           (pkgs.writeShellScriptBin "skvim" ''

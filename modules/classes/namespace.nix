@@ -43,7 +43,7 @@ in
     ##
     #  };
     homeModules = {
-      skim = (evalModules { modules = [(resolve "homeManager" biapy.skim)]; }).config;
+      skim = resolve "homeManager" biapy.skim;
     };
   };
 

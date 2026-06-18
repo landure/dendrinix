@@ -93,8 +93,8 @@
 
           (pkgs.writeShellScriptBin "skrg" ''
             # Live grep
-            ${getExe config.programs.skim.package} --ansi --delimiter ':' \
-              -c '${getExe config.programs.ripgrep.package} --line-number --no-heading --color=always "{}"' \
+            ${getExe config.programs.skim.package} --ansi --delimiter ':' --interactive \
+              --cmd='${getExe config.programs.ripgrep.package} --line-number --no-heading --color=always {q}' \
               --preview='${getExe config.programs.bat.package} --style=numbers --color=always --highlight-line {2} {1}' \
               --preview-window='right:70%:wrap'
           '')
@@ -105,7 +105,7 @@
             # see https://ivergara.github.io/Supercharging-shell.html
             ${getExe config.programs.skim.package} --ansi \
             --bind "ctrl-p:toggle-preview" \
-            --preview="${getExe config.programs.bat.package} --style=numbers --color=always '{}'"
+            --preview="${getExe config.programs.bat.package} --style=numbers --color=always '{}'" \
             --preview-window='right:60%:hidden' |
             xargs -I '{}' ${getExe config.programs.neovim.package} {}
           '')
@@ -115,7 +115,7 @@
             # see https://ivergara.github.io/Supercharging-shell.html
             ${getExe config.programs.skim.package} --ansi \
             --bind "ctrl-p:toggle-preview" \
-            --preview="${getExe config.programs.bat.package} --style=numbers --color=always '{}'"
+            --preview="${getExe config.programs.bat.package} --style=numbers --color=always '{}'" \
             --preview-window='right:60%:hidden' |
             xargs -I '{}' ${getExe config.programs.helix.package} {}
           '')
@@ -126,7 +126,7 @@
             set -o pipefail
             ${getExe config.programs.skim.package} --ansi \
             --bind "ctrl-p:toggle-preview" \
-            --preview="${getExe config.programs.bat.package} --color=always {}"
+            --preview="${getExe config.programs.bat.package} --color=always {}" \
             --preview-window='right:60%:hidden' |
             xargs -I '{}' ${getExe config.programs.vscode.package} :w {}
           '')

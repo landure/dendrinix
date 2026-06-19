@@ -27,18 +27,20 @@ let
     in
     { config, lib, ... }:
     let
-      inherit (lib.modules) mkIf;
+      inherit (lib.modules) mkIf evalOptionValue;
       inherit (lib.options) mkEnableOption;
       inherit (lib.lists) optional;
 
       cfg = config.biapy.${name};
+
+      import_flag = evalOptionValue cfg.enable;
     in
     {
       options = {
         biapy.${name}.enable = mkEnableOption "biapy.${name} aspect";
       };
 
-      imports = optional cfg.enable module;
+      imports = optional import_flag module;
     };
 
   namespaceToHomeModules = namespace: _: {

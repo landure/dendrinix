@@ -19,7 +19,7 @@
   - [Temporarily disable ssh public key authentication from client @ serfverfault](https://serverfault.com/questions/493213/temporarily-disable-ssh-public-key-authentication-from-client).
 */
 {
-  biapy.skim = {
+  biapy.ssh = {
 
     homeManager =
       {

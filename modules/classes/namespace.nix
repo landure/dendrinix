@@ -12,6 +12,7 @@
   den,
   inputs,
   lib,
+  moduleLocation,
   ...
 }:
 let
@@ -35,9 +36,8 @@ let
       options = {
         biapy.${name}.enable = mkEnableOption "biapy.${name} aspect";
       };
-      config = mkIf cfg.enable {
-        imports = [ module ];
-      };
+
+      imports = [ (mkIf cfg.enable module) ];
     };
 
   namespaceToHomeModules = namespace: _: {

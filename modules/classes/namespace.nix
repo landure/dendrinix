@@ -29,6 +29,7 @@ let
     let
       inherit (lib.modules) mkIf;
       inherit (lib.options) mkEnableOption;
+      inherit (lib.lists) optional;
 
       cfg = config.biapy.${name};
     in
@@ -37,7 +38,7 @@ let
         biapy.${name}.enable = mkEnableOption "biapy.${name} aspect";
       };
 
-      imports = [ (mkIf cfg.enable module) ];
+      imports = optional cfg.enable module;
     };
 
   namespaceToHomeModules = namespace: _: {

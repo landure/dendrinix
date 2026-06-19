@@ -36,12 +36,12 @@ let
         biapy.${name}.enable = mkEnableOption "biapy.${name} aspect";
       };
       config = mkIf cfg.enable {
-        modules = [ module ];
+        imports = [ module ];
       };
     };
 
   namespaceToHomeModules = namespace: _: {
-    modules = builtins.attrValues (builtins.mapAttrs aspectToHomeModule namespace);
+    imports = builtins.attrValues (builtins.mapAttrs aspectToHomeModule namespace);
   };
 in
 {

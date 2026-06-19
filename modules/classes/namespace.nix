@@ -27,13 +27,13 @@ let
     in
     { config, lib, ... }:
     let
-      inherit (lib.modules) mkIf evalOptionValue;
+      inherit (lib.modules) mkIf;
       inherit (lib.options) mkEnableOption;
       inherit (lib.lists) optional;
 
       cfg = config.biapy.${name};
 
-      import_flag = evalOptionValue cfg.enable;
+      import_flag = (builtins.tryEval cfg.enable).value;
     in
     {
       options = {

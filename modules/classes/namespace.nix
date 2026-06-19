@@ -16,21 +16,32 @@
 }:
 let
   inherit (lib.modules) evalModules;
-  inherit (den.lib.policy) route;
+  inherit (den.lib.policy) route pipe;
   inherit (den.lib.aspects) resolve;
-  forwardBiapyAspects =
-    { biapy }:
-    den.batteries.forward {
-      each = builtins.attrNames biapy;
-      fromClass = _: "homeManager";
-      intoClass = _: "flake";
-      intoPath = aspect_name: [
-        "flake"
-        "homeModules"
-        aspect_name
-      ];
-      fromAspect = aspect_name: den.aspects.${aspect_name};
+
+  aspectToModule =
+    name:
+    aspect:
+    let
+      module = resolve "homeManager" aspect;
+in
+    { config, lib, ... }:
+    let
+      inherit (lib.modules) mkIf;
+      inherit (lib.options) mkEnableOption;
+
+      cfg = config.biapy.${name};
+    in
+    {
+      options = {
+        biapy.${name}.enable = mkEnableOption "biapy.${name} aspect";
+      };
+      config = mkIf cfg.enable {
+        imports = [ module ];
+      };
     };
+
+    namespaceToModules = namespace: builtins.attrValues (builtins.mapAttrs aspectToModule namespace);
 in
 {
   imports = [
@@ -44,37 +55,10 @@ in
     #  };
     homeModules = {
       skim = resolve "homeManager" biapy.skim;
+      biapy = _: {
+        imports = namespaceToModules biapy;
+      };
     };
   };
-
-  #  biapy.policies.aspects-to-flake-parts-homeModules = _: [
-  #    (route {
-  #      fromClass = "homeManager";
-  #      intoClass = "flake";
-  #      path = [
-  #        "flake"
-  #        "homeModules"
-  #      ];
-  #    })
-  #  ];
-  #
-  #  den.policies.to-home-modules = { biapy, ...}:
-  #  let
-  #    aspect_names = builtins.attrNames biapy;
-  #
-  #    aspectNameToHomeModule = aspect_name: {
-  #     name = aspect_name;
-  #     value = resolve.to "home" biapy.${aspect_name};
-  #    };
-  #
-  #    in {
-  #  homeModules = builtins.listToAttrs (map aspectNameToHomeModule aspect_names);
-  #    };
-
-  #den.schema.flake-parts.includes = [
-  #biapy.policies.aspects-to-flake-parts-homeModules
-  #forwardBiapyAspects
-  # den.policies.to-home-modules
-  #];
 
 }

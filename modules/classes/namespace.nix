@@ -19,12 +19,11 @@ let
   inherit (den.lib.policy) route pipe;
   inherit (den.lib.aspects) resolve;
 
-  aspectToModule =
-    name:
-    aspect:
+  aspectToHomeModule =
+    name: aspect:
     let
       module = resolve "homeManager" aspect;
-in
+    in
     { config, lib, ... }:
     let
       inherit (lib.modules) mkIf;
@@ -37,11 +36,13 @@ in
         biapy.${name}.enable = mkEnableOption "biapy.${name} aspect";
       };
       config = mkIf cfg.enable {
-        imports = [ module ];
+        modules = [ module ];
       };
     };
 
-    namespaceToModules = namespace: builtins.attrValues (builtins.mapAttrs aspectToModule namespace);
+  namespaceToHomeModules = namespace: _: {
+    modules = builtins.attrValues (builtins.mapAttrs aspectToHomeModule namespace);
+  };
 in
 {
   imports = [
@@ -55,9 +56,7 @@ in
     #  };
     homeModules = {
       skim = resolve "homeManager" biapy.skim;
-      biapy = _: {
-        imports = namespaceToModules biapy;
-      };
+      biapy = namespaceToHomeModules biapy;
     };
   };
 

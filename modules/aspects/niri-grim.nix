@@ -42,7 +42,7 @@
     ([dfr-screenshot @ 🥡 DotFriedRice's GitHub](https://github.com/nickjj/dotfriedrice/blob/master/.local/bin/dfr-screenshot)).
 */
 {
-  biapy.skim = {
+  biapy.niri-grim = {
     homeManager =
       {
         config,

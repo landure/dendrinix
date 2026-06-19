@@ -23,24 +23,30 @@ let
   aspectToHomeModule =
     name: aspect:
     let
-      module = resolve "homeManager" aspect;
+      wrapped_aspect =
+        { config, lib, ... }:
+        let
+          inherit (lib.modules) mkIf;
+        in
+        {
+          meta.enabled = false;
+          _functor = self: ctx: if config.meta.enabled then { includes = [ biapy.${name} ]; } else { };
+        };
+
+      module = resolve "homeManager" wrapped_aspect;
     in
     { config, lib, ... }:
     let
-      inherit (lib.modules) mkIf;
       inherit (lib.options) mkEnableOption;
-      inherit (lib.lists) optional;
 
-      cfg = config.biapy.${name};
-
-      import_flag = (builtins.tryEval cfg.enable).value;
+      wrapped_aspect.meta.enabled = config.biapy.${name}.enable;
     in
     {
       options = {
         biapy.${name}.enable = mkEnableOption "biapy.${name} aspect";
       };
 
-      imports = optional import_flag module;
+      imports = [ module ];
     };
 
   namespaceToHomeModules = namespace: _: {

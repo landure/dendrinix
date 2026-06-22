@@ -23,7 +23,6 @@
 
     homeManager =
       {
-        config,
         lib,
         pkgs,
         ...
@@ -32,7 +31,7 @@
         inherit (lib.meta) getExe getExe';
         inherit (lib.modules) mkDefault;
 
-        ssh_exe = getExe pkgs.openssh "ssh";
+        ssh_exe = getExe pkgs.openssh;
         ssh-copy-id_exe = getExe' pkgs.openssh "ssh-copy-id";
       in
       {
@@ -59,7 +58,7 @@
 
         services.ssh-agent.enable = mkDefault true;
 
-        home.packages = with pkgs; [
+        home.packages = [
           (pkgs.writeShellScriptBin "passh" ''
             # ssh with public key authentication turned off
             # see https://serverfault.com/questions/493213/temporarily-disable-ssh-public-key-authentication-from-client

@@ -45,42 +45,42 @@
       }:
       let
         inherit (lib.meta) getExe;
-        inherit (lib.modules) mkIf mkDefault;
-        inherit (lib.options) mkEnableOption;
-
+        inherit (lib.modules) mkDefault;
       in
       {
-        programs.fd.enable = mkDefault true;
-        programs.bat.enable = mkDefault true;
-        programs.ripgrep.enable = mkDefault true;
+        programs = {
+          fd.enable = mkDefault true;
+          bat.enable = mkDefault true;
+          ripgrep.enable = mkDefault true;
 
-        programs.skim = {
-          enable = mkDefault true;
-          # defaultCommand = "rg --files || fd || find .";
-          defaultCommand = config.programs.skim.fileWidgetCommand;
+          skim = {
+            enable = mkDefault true;
+            # defaultCommand = "rg --files || fd || find .";
+            defaultCommand = config.programs.skim.fileWidgetCommand;
 
-          defaultOptions = [
-            "--height 40%"
-            "--prompt='⟫'"
-          ];
-          # ALT-C
-          changeDirWidgetCommand = mkDefault "${getExe config.programs.fd.package} --type 'd' --hidden --follow --exclude '.git'";
-          changeDirWidgetOptions = mkDefault [
-            "--preview 'tree -C {} | head -200'"
-          ];
+            defaultOptions = [
+              "--height 40%"
+              "--prompt='⟫'"
+            ];
+            # ALT-C
+            changeDirWidgetCommand = mkDefault "${getExe config.programs.fd.package} --type 'd' --hidden --follow --exclude '.git'";
+            changeDirWidgetOptions = mkDefault [
+              "--preview 'tree -C {} | head -200'"
+            ];
 
-          # CTRL-T
-          fileWidgetCommand = mkDefault "${getExe config.programs.fd.package} --type 'f' --hidden --follow --exclude '.git'";
-          fileWidgetOptions = mkDefault [
-            "--preview='${getExe config.programs.bat.package} --style=numbers --color=always --line-range :500 {}"
-            "--preview-window='right:60%:wrap'"
-          ];
+            # CTRL-T
+            fileWidgetCommand = mkDefault "${getExe config.programs.fd.package} --type 'f' --hidden --follow --exclude '.git'";
+            fileWidgetOptions = mkDefault [
+              "--preview='${getExe config.programs.bat.package} --style=numbers --color=always --line-range :500 {}"
+              "--preview-window='right:60%:wrap'"
+            ];
 
-          # CTRL-R
-          historyWidgetOptions = mkDefault [
-            "--tac"
-            "--exact"
-          ];
+            # CTRL-R
+            historyWidgetOptions = mkDefault [
+              "--tac"
+              "--exact"
+            ];
+          };
         };
 
         home.packages = [

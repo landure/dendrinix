@@ -58,27 +58,27 @@
         slurp_exe = getExe pkgs.slurp;
         jq_exe = getExe config.programs.jq.package;
         satty_exe = getExe config.programs.satty.package;
-        wl-copy_exe = getExe' pkgs.wl-clipboard "wl-copy";
-        wl-paste_exe = getExe' pkgs.wl-clipboard "wl-paste";
+        wl-copy_exe = getExe' pkgs.wl-clipboard-rs "wl-copy";
+        wl-paste_exe = getExe' pkgs.wl-clipboard-rs "wl-paste";
       in
       {
         home.packages = with pkgs; [
           grim
           slurp
-          wl-clipboard
+          wl-clipboard-rs
 
           (pkgs.writeShellScriptBin "dfr-screenshot" ''
-            # Open with Neovim.
-            # Should use xargs.
+            # For Niri Window manager
+            # create a screenshot with grim, and annotate it with satty.
             # see https://ivergara.github.io/Supercharging-shell.html
                         
             set -o errexit
             set -o pipefail
             set -o nounset
 
-            MODE="${"1:-region"}"
+            MODE="''${"1:-region"}"
 
-            case "${MODE}" in
+            case "''${MODE}" in
               region)
                 ${grim_exe} -g "$(${slurp_exe} -d)" -
                 ;;
@@ -95,11 +95,11 @@
                 ${grim_exe} -
                 ;;
               *)
-                echo "'${MODE}' is not a supported, aborting!" >&2
+                echo "''${MODE} is not a supported, aborting!" >&2
                 exit 1
                 ;;
             esac |
-            ${satty_exe} --filename - --output-filename "${XDG_PICTURES_DIR}/screenshot-%+.png"
+            ${satty_exe} --filename - --output-filename "''${XDG_PICTURES_DIR}/screenshot-%+.png"
           '')
         ];
 

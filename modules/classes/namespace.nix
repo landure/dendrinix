@@ -65,6 +65,9 @@ in
     #  };
     homeModules = {
       skim = resolve "homeManager" biapy.skim;
+      mise = resolve "homeManager" biapy.mise;
+
+      # Broken at this time
       biapy = namespaceToHomeModules biapy;
     };
   };
